@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HexChat V.1.3.1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Add the CSS content from below */
+        :root {
+            --neon-cyan: #0ff;
+            --neon-magenta: #f0f;
+            --matrix-green: #0f0;
+            --cyber-black: #000;
+            --cyber-dark: #111;
+        }
+
+        
+        
+        body {
+            margin: 0;
+            background: var(--cyber-black);
+            font-family: 'Ubuntu Mono', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .cyber-terminal {
+            max-width: 1280px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .cyber-title {
+            text-align: center;
+            color:  var(--matrix-green);
+            font-size: 3rem;
+            text-shadow: 0 0 10px var(--matrix-green);
+            position: relative;
+            margin-bottom: 1rem;
+            margin-top: -3rem;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            animation: glitch-1 2s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: 2px 0 #00fff9;
+            animation: glitch-2 2s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-1 {
+            0% { clip-path: inset(20% 0 30% 0); }
+            100% { clip-path: inset(10% 0 40% 0); }
+        }
+        
+        @keyframes glitch-2 {
+            0% { clip-path: inset(40% 0 10% 0); }
+            100% { clip-path: inset(30% 0 20% 0); }
+        }
+        
+        .cyber-form {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border: 2px solid var(--matrix-green);
+            box-shadow: 0 0 20px var(--matrix-green);
+            border-radius: 5px;
+            width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .cyber-input {
+            width: 380%;
+            padding: 1rem 1rem 1rem 2.5rem;
+            background: var(--cyber-dark);
+            border: none;
+            color: var(--matrix-green);
+            font-family: 'Ubuntu Mono', monospace;
+            letter-spacing: 1px;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--matrix-green);
+        }
+        
+        .cyber-border {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--matrix-green), var(--matrix-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        
+        
+        /* Disable the border glow for fields with the 'no-glow' class */
+        .no-glow:focus + .cyber-border {
+            transform: scaleX(0);
+        }
+        
+
+
+        .cyber-buttonn {
+            margin-left:650px;
+            position: relative;
+            background: var(--cyber-dark);
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 1rem 2rem;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cyber-buttonn:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 15px var(--matrix-green);
+        }
+        
+        .cyber-buttonn-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 255, 255, 0.4),
+                transparent
+            );
+            transition: left 0.6s;
+        }
+        
+        .cyber-buttonn:hover .cyber-button-glow {
+            left: 100%;
+        }
+
+        
+        .cyber-button {
+            margin-left:0px;
+            position: relative;
+            background: var(--cyber-dark);
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 1rem 2rem;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .cyber-button:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 15px var(--matrix-green);
+        }
+        
+        .cyber-button-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 255, 255, 0.4),
+                transparent
+            );
+            transition: left 0.6s;
+        }
+        
+        .cyber-button:hover .cyber-button-glow {
+            left: 100%;
+        }
+        
+        .cyber-chat {
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid varvar(--matrix-green);
+            box-shadow: 0 0 20px var(--matrix-green);
+            border-radius: 5px;
+            max-height:487px;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .chat-log {
+            height: 387px;
+            max-width:939px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 1rem;
+        }
+        
+        .chat-message {
+            margin: 0.5rem 0;
+            animation: messageIn 0.3s ease;
+        }
+        
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-bubble {
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            max-width: 35%;
+            position: relative;
+        }
+        
+        .chat-bubble.self {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--matrix-green);
+            border-radius:0px;
+            margin-left: auto;
+            color: var(--matrix-green);
+        }
+        
+        .chat-bubble.other {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--matrix-green);
+            border-radius:0px;
+            margin-right: auto;
+            color: var(--matrix-green);
+        }
+        
+        .terminal-text {
+            color: var(--matrix-green);
+            border-bottom: 1px solid var(--matrix-green);
+            padding-bottom: 0.5rem;
+        }
+        
+        .terminal-list {
+            list-style: none;
+            padding: 0;
+            color: var(--matrix-green);
+        }
+        
+        .terminal-list li::before {
+            content: ">";
+            margin-right: 0.5rem;
+            color: var(--matrix-green);
+        }
+        
+        .message-input-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        #room-name, #user-identity {
+            width: 86%;
+        }
+        
+        
+        .message-input-container .cyber-input {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    
+    <div class="cyber-terminal">
+        <h1 class="cyber-title glitch" data-text="HexChat V.1.3.1">HexChat V.1.3.1</h1>
+        
+        <div id="auth-container" class="cyber-form">
+            <div class="input-wrapper">
+                <i class="fas fa-terminal input-icon"></i>
+                <input type="text" id="room-name" class="cyber-input" placeholder="Room Name" >
+                <span class="cyber-border"></span>
+            </div>
+            <div class="input-wrapper">
+                <i class="fas fa-user-secret input-icon"></i>
+                <input type="text" id="user-identity" class="cyber-input" placeholder="User Identity">
+                <span class="cyber-border"></span>
+            </div>
+            <button id="join-room" class="cyber-button">
+                <span class="cyber-button-text">INITIALIZE CONNECTION</span>
+                <span class="cyber-button-glow"></span>
+            </button>
+        </div>
+
+        <div id="chat-container" class="cyber-chat">
+            <div id="chat-log" class="chat-log"></div>
+            
+            <div class="message-input-container">
+                <div class="input-wrapper">
+                    <i class="fas fa-comment-dots input-icon"></i>
+                    <input type="text" id="chat-message-input" class="cyber-input" placeholder="ENCRYPT_MESSAGE">
+                    <span class="cyber-border"></span>
+                </div>
+                <button id="chat-message-submit" class="cyber-buttonn small">
+                    <span class="cyber-button-text">SEND</span>
+                    <span class="cyber-button-glow"></span>
+                </button>
+            </div>
+
+            <div style="position:relative;top:-500px;" id="user-list" class="cyber-userlist">
+                <h3 style="margin-left:1000px;" class="terminal-text">ACTIVE NODES <i class="fas fa-satellite-dish"></i></h3>
+                <ul style="margin-left:1000px;" id="users-in-room" class="terminal-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add the JavaScript content from below
+        // Matrix rain effect
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+const drops = Array(Math.floor(canvas.width / 10)).fill(0);
+
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = '#0F0';
+    ctx.font = '14px monospace';
+
+    drops.forEach((drop, i) => {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * 10, drop * 10);
+        
+        if (drop * 10 > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    });
+}
+
+setInterval(drawMatrix, 50);
+
+// Chat functionality
+let chatSocket = null;
+
+document.querySelector('#join-room').onclick = function() {
+    const roomName = document.querySelector('#room-name').value.trim();
+    const username = document.querySelector('#user-identity').value.trim();
+
+    if (!roomName || !username) {
+        alert('ERROR: INPUT FIELDS REQUIRED');
+        return;
+    }
+
+    document.querySelector('#auth-container').style.display = 'none';
+    document.querySelector('#chat-container').style.display = 'block';
+
+    if (chatSocket) chatSocket.close();
+
+    chatSocket = new WebSocket(
+        'ws://' + window.location.host + `/ws/chat/${roomName}/?username=${username}`
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatLog = document.querySelector('#chat-log');
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = `chat-message ${data.username === username ? 'self' : 'other'}`;
+        
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble ${data.username === username ? 'self' : 'other'}`;
+        bubble.innerHTML = `
+            <span class="user">${data.username}</span>
+            <div class="message">${data.message}</div>
+            <div class="timestamp">${new Date().toLocaleTimeString()}</div>
+        `;
+
+        messageElement.appendChild(bubble);
+        chatLog.appendChild(messageElement);
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        if (data.user_list) {
+            const userList = document.querySelector('#users-in-room');
+            userList.innerHTML = data.user_list.map(user => 
+                `<li>${user} ${user === username ? '<i class="fas fa-terminal"></i>' : ''}</li>`
+            ).join('');
+        }
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('CONNECTION TERMINATED');
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function() {
+        const messageInput = document.querySelector('#chat-message-input');
+        const message = messageInput.value.trim();
+
+        if (message) {
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username
+            }));
+            messageInput.value = '';
+        }
+    };
+
+    document.querySelector('#chat-message-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.querySelector('#chat-message-submit').click();
+        }
+    });
+};
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+    </script>
+</body>
+</html>
